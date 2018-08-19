@@ -1,0 +1,12 @@
+{
+    "name": "retrowaver/chomikuj2",
+    "description": "Chomikuj.pl PHP API",
+    "type": "library",
+    "authors": [
+        {
+            "name": "retrowaver",
+            "email": "23421260+retrowaver@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}
