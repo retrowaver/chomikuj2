@@ -5,13 +5,13 @@ namespace Chomikuj;
 interface ApiInterface
 {
 	public function login(string $username, string $password): ApiInterface;
-	public function logout(): ApiInterface;
+	//public function logout(): ApiInterface;
 
 	public function createFolder(
 		string $folderName,
 		int $parentFolderId,
 		bool $adult,
-		string $password
+		?string $password
 	): ApiInterface;
 
 	public function removeFolder(int $folderId): ApiInterface;

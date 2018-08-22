@@ -4,13 +4,13 @@ namespace Chomikuj;
 
 use Chomikuj\ChomikujException;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Psr7\Request;
 
 class Api implements ApiInterface
 {
-	const BASE_URL = 'http://chomikuj.pl';
+	const BASE_URL = 'https://chomikuj.pl';
 	const URIS = [
 		'login' => '/action/Login/TopBarLogin',
+        'logout' => '/action/Login/LogOut',
 		'create_folder' => '/action/FolderOptions/NewFolderAction',
 		'remove_folder' => '/action/FolderOptions/DeleteFolderAction',
 		'upload_file' => '/action/Upload/GetUrl',
@@ -19,7 +19,6 @@ class Api implements ApiInterface
 		'rename_file' => '/action/FileDetails/EditNameAndDescAction',
 		'get_folders' => '/action/tree/loadtree',
 	];
-
 	const ERR_INVALID_JSON_RESPONSE = 'Invalid JSON response.';
 	const ERR_TOKEN_NOT_FOUND = 'Token was not found.';
 	const ERR_FOLDER_NOT_CREATED = 'Folder could not be created.';
@@ -64,15 +63,21 @@ class Api implements ApiInterface
 
 	public function logout(): ApiInterface
 	{
+        $response = $this->client->request(
+            'POST',
+            $this->getUrl('logout')
+        );
+
+        $this->username = null;
 
 		return $this;
 	}
 
 	public function createFolder(
-		$folderName,
-		$parentFolderId = 0,
-		$adult = false,
-		$password = null
+		string $folderName,
+		int $parentFolderId = 0,
+		bool $adult = false,
+		?string $password = null
 	): ApiInterface {
 		$response = $this->client->request(
 			'POST',
@@ -187,7 +192,7 @@ class Api implements ApiInterface
 		for ($i = 0; $i < count($matches[0]); $i++) {
 			$folders[] = [
 				'path' => $matches[1][$i],
-				'id' => $matches[2][$i],
+				'id' => (int)$matches[2][$i],
 				'name' => $matches[3][$i],
 			];
 		}
