@@ -8,5 +8,11 @@
             "email": "23421260+retrowaver@users.noreply.github.com"
         }
     ],
-    "require": {}
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "require-dev": {},
+    "autoload": {
+        "psr-4": {"Chomikuj\\": "src/"}
+    }
 }
