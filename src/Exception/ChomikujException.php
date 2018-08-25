@@ -1,5 +1,5 @@
 <?php
 
-namespace Chomikuj;
+namespace Chomikuj\Exception;
 
 class ChomikujException extends \Exception {}

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Chomikuj\Api;
-use Chomikuj\ChomikujException;
+use Chomikuj\Exception\ChomikujException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -74,24 +74,6 @@ final class ApiLoginTest extends TestCase
 
         $this->expectException(ChomikujException::class);
         $api->login('username', 'password');
-    }
-
-    public function testLogoutResetsUsernamePropertyToNull(): void
-    {
-        $api = FakeApiFactory::getApi(
-            'username',
-            [
-                new Response(200, [], 'whatever'),
-            ]
-        );
-
-        $api->logout();
-
-        $reflection = new \ReflectionClass($api);
-        $property = $reflection->getProperty('username');
-        $property->setAccessible(true);
-
-        $this->assertEquals(null, $property->getValue($api));
     }
 }
 

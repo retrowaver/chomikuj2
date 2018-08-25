@@ -1,6 +1,6 @@
 {
     "name": "retrowaver/chomikuj2",
-    "description": "Chomikuj.pl PHP API",
+    "description": "Unofficial Chomikuj.pl PHP API",
     "type": "library",
     "authors": [
         {
@@ -9,10 +9,14 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^6.3"
+        "php": "^7.1",
+        "php-64bit": "*",
+        "guzzlehttp/guzzle": "^6.3",
+        "psr/http-message": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7"
+        "phpunit/phpunit": "^7",
+        "mikey179/vfsStream": "^1.6"
     },
     "autoload": {
         "psr-4": {"Chomikuj\\": "src/"}

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Chomikuj\Api;
-use Chomikuj\ChomikujException;
+use Chomikuj\Exception\ChomikujException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -12,6 +12,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Middleware;
+use org\bovigo\vfs\vfsStream;
 
 require_once(__DIR__ . '/FakeApiFactory.php');
 
@@ -146,5 +147,41 @@ final class ApiFileTest extends TestCase
 
         $this->expectException(ChomikujException::class);
         $api->renameFile(123, 'some filename', 'some description');
+    }
+
+    public function testUploadFileThrowsExceptionOnFirstInvalidResponse(): void
+    {
+        $api = FakeApiFactory::getApi(
+            'username',
+            [
+                new Response(200, [], 'definitely not JSON with Url property'),
+            ]
+        );
+        
+        $this->expectException(ChomikujException::class);
+        $api->uploadFile(123, self::getFakeFilePath());
+    }
+
+    public function testUploadFileThrowsExceptionOnSecondInvalidResponse(): void
+    {
+        $api = FakeApiFactory::getApi(
+            'username',
+            [
+                new Response(200, [], '{"Url": "http://some-valid-upload-url.ru"}'),
+                new Response(400, [], 'some bad request'),
+            ]
+        );
+        
+        $this->expectException(ChomikujException::class);
+        $api->uploadFile(123, self::getFakeFilePath());
+    }
+
+    private static function getFakeFilePath(): string
+    {
+        $root = vfsStream::setup('files');
+        $file = vfsStream::url('files/file.txt');
+        file_put_contents($file, "content of a file");
+
+        return $file;
     }
 }
