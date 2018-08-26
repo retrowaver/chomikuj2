@@ -28,6 +28,8 @@ class Api implements ApiInterface
     const ERR_REQUEST_FAILED = 'Request failed.';
     const ERR_WEIRD_RESPONSE = 'Response looks valid, but could not be read.';
     const ERR_TOKEN_NOT_FOUND = 'Token could not be found.';
+    const ERR_WRONG_FILE_PATH = 'Wrong file path / no access to file.';
+    const ERR_FILE_IS_EMPTY = 'File is empty.';
 
     private $client;
     private $username;
@@ -145,6 +147,14 @@ class Api implements ApiInterface
 
     public function uploadFile(int $folderId, string $filePath): ApiInterface
     {
+        if (!is_readable($filePath)) {
+            throw new ChomikujException(self::ERR_WRONG_FILE_PATH);
+        }
+
+        if (filesize($filePath) === 0) {
+            throw new ChomikujException(self::ERR_FILE_IS_EMPTY);
+        }
+
         $response = $this->client->request(
             'POST',
             $this->getUrl('upload_file'),
