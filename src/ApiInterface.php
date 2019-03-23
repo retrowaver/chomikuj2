@@ -24,6 +24,16 @@ interface ApiInterface
     public function logout(): ApiInterface;
 
     /**
+     * Returns first level subfolders of specified folder of specified user
+     *
+     * @param string $username use null for currently logged in user
+     * @param int $folderId use 0 for root folder
+     * @throws ChomikujException if request failed
+     * @return Folder[]
+     */
+    public function getFolders(?string $username, int $folderId);
+
+    /**
      * Creates folder of provided name
      *
      * @param string $folderName
@@ -53,17 +63,6 @@ interface ApiInterface
      * @return self
      */
     public function uploadFile(int $folderId, string $filePath): ApiInterface;
-
-    /**
-     * Gets all folders of a specified user
-     *
-     * Does not require logging in.
-     *
-     * @param string|null $username null for folders of currently logged in user
-     * @throws ChomikujException if request failed
-     * @return Folder
-     */
-    public function getFoldersByUsername(?string $username): Folder;
 
     /**
      * Moves a file between folders

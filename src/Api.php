@@ -23,10 +23,10 @@ class Api implements ApiInterface
         'move_file' => '/action/FileDetails/MoveFileAction',
         'copy_file' => '/action/FileDetails/CopyFileAction',
         'rename_file' => '/action/FileDetails/EditNameAndDescAction',
-        'get_folders' => '/action/tree/loadtree',
+        'get_folder_children' => '/action/tree/GetFolderChildrenHtml',
     ];
     const ERR_REQUEST_FAILED = 'Request failed.';
-    const ERR_WEIRD_RESPONSE = 'Response looks valid, but could not be read.';
+    const ERR_WEIRD_RESPONSE = 'Response looks valid, but could not be read (reason unknown).';
     const ERR_TOKEN_NOT_FOUND = 'Token could not be found.';
     const ERR_WRONG_FILE_PATH = 'Wrong file path / no access to file.';
     const ERR_FILE_IS_EMPTY = 'File is empty.';
@@ -192,14 +192,16 @@ class Api implements ApiInterface
         return $this;
     }
 
-    public function getFoldersByUsername(?string $username = null): Folder
+    public function getFolders(?string $username = null, int $folderId = 0)
     {
         $response = $this->client->request(
             'POST',
-            $this->getUrl('get_folders'),
+            $this->getUrl('get_folder_children'),
             [
                 'form_params' => [
-                    'ChomikName' => $username ?? $this->getUsername()
+                    'chomikName' => $username ?? $this->getUsername(),
+                    'folderId' => $folderId,
+                    'ticks' => '636888805182530000'
                 ],
             ]
         );
