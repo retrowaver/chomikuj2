@@ -32,7 +32,7 @@ class Api implements ApiInterface
     const ERR_FILE_IS_EMPTY = 'File is empty.';
 
     private $client;
-    private $username;
+    private $username = null;
 
     public function __construct(
         ?ClientInterface $client = null,
@@ -201,7 +201,7 @@ class Api implements ApiInterface
                 'form_params' => [
                     'chomikName' => $username ?? $this->getUsername(),
                     'folderId' => $folderId,
-                    'ticks' => '636888805182530000'
+                    'ticks' => '636888805182530000' // no idea what it is and if it expires or something (we'll see)
                 ],
             ]
         );

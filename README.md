@@ -33,13 +33,6 @@ $chomikuj->createFolder('some password-protected folder', 0, false, 'some_passwo
 // Remove folder with id 12345
 $chomikuj->removeFolder(12345);
 ```
-```php
-// Remove all folders
-$rootFolder = $chomikuj->getFoldersByUsername();
-foreach ($rootFolder->getFolders() as $folder) {
-	$chomikuj->removeFolder($folder->getId());
-}
-```
 
 ### Uploading files
 ```php
