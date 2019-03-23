@@ -105,20 +105,20 @@ final class ApiFolderTest extends TestCase
         $api->removeFolder(123);
     }
 
-    public function testGetFoldersByUsernameCorrectlyReadsValidResponse(): void
+    public function testGetFoldersCorrectlyReadsValidResponse(): void
     {
         $api = FakeApiFactory::getApi(
             'username',
             [
-                new Response(200, [], '<tr><td><div class="T_c"><div id="Ti_0" class="T_col"></div></div></td><td><a href="/username" rel="0" title="username" id="Ta_0">username</a></td></tr><tr id="Tc_0"><td></td><td><table cellspacing="0" cellpadding="0"><tbody><tr><td class="T_bg"><div class="T_pn"><div id="Ti_1" class="T_exp"></div></div></td><td><a href="/username/Dokumenty" rel="1" title="Dokumenty" id="Ta_1">Dokumenty</a></td></tr>'),
+                new Response(200, [], '{"Status":0,"Html":"<tr><td class=\"T_bg\"><div class=\"T T_pn\"><\/div><\/td><td><a href=\"\/username\/folder1\" rel=\"1\" title=\"Folder 1\" id=\"Ta_1\">Folder 1<\/a><\/td><\/tr><tr><td class=\"T_bg\"><div class=\"T_pn\"><div id=\"Ti_2\" class=\"T_exp\"><\/div><\/div><\/td><td><a href=\"\/username\/folder2\" rel=\"2\" title=\"Folder 2\" id=\"Ta_2\">Folder 2<\/a><\/td><\/tr>"}'),
             ]
         );
 
-        $rootFolder = $api->getFoldersByUsername();
+        $folders = $api->getFolders();
 
-        $this->assertEquals(1, count($rootFolder->getFolders()));
-        $this->assertEquals(1, $rootFolder->getFolders()[0]->getId());
-        $this->assertEquals('Dokumenty', $rootFolder->getFolders()[0]->getName());
-        $this->assertEquals('/username/Dokumenty', $rootFolder->getFolders()[0]->getPath());
+        $this->assertEquals(2, count($folders));
+        $this->assertEquals(2, $folders[1]->getId());
+        $this->assertEquals('Folder 1', $folders[0]->getName());
+        $this->assertEquals('/username/folder1', $folders[0]->getPath());
     }
 }
