@@ -26,12 +26,12 @@ interface ApiInterface
     /**
      * Returns first level subfolders of specified folder of specified user
      *
-     * @param string $username use null for currently logged in user
+     * @param string $username
      * @param int $folderId use 0 for root folder
      * @throws ChomikujException if request failed
      * @return Folder[]
      */
-    public function getFolders(?string $username, int $folderId);
+    public function getFolders(string $username, int $folderId);
 
     /**
      * Creates folder of provided name
