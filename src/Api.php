@@ -192,14 +192,14 @@ class Api implements ApiInterface
         return $this;
     }
 
-    public function getFolders(?string $username = null, int $folderId = 0)
+    public function getFolders(string $username, int $folderId = 0)
     {
         $response = $this->client->request(
             'POST',
             $this->getUrl('get_folder_children'),
             [
                 'form_params' => [
-                    'chomikName' => $username ?? $this->getUsername(),
+                    'chomikName' => $username,
                     'folderId' => $folderId,
                     'ticks' => '636888805182530000' // no idea what it is and if it expires or something (we'll see)
                 ],

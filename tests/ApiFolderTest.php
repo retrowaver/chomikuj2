@@ -114,7 +114,7 @@ final class ApiFolderTest extends TestCase
             ]
         );
 
-        $folders = $api->getFolders();
+        $folders = $api->getFolders('username');
 
         $this->assertEquals(2, count($folders));
         $this->assertEquals(2, $folders[1]->getId());
