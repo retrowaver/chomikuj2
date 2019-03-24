@@ -36,11 +36,6 @@ class Folder
 		return $this->path;
 	}
 
-	public function getUrl(): string
-	{
-		return Api::BASE_URL . $this->path;
-	}
-
 	public function getFolders(): array
 	{
 		return $this->folders;
