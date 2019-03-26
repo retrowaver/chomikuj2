@@ -2,6 +2,7 @@
 
 namespace Chomikuj;
 
+use Chomikuj\Entity\File;
 use Chomikuj\Entity\Folder;
 
 interface ApiInterface
@@ -22,6 +23,17 @@ interface ApiInterface
      * @return self
      */
     public function logout(): ApiInterface;
+
+    /**
+     * Returns an array of found Files
+     *
+     * @param string $phrase search phrase
+     * @param array $optionalParameters optional parameters directly passed to request
+     * @param int $page search result page (starts from 1)
+     * @throws ChomikujException if request failed
+     * @return File[]
+     */
+    public function findFiles(string $phrase, array $optionalParameters = [], int $page = 1): array;
 
     /**
      * Returns first level subfolders of specified folder of specified user

@@ -6,6 +6,8 @@ use Chomikuj\Exception\ChomikujException;
 use Chomikuj\Entity\Folder;
 use Chomikuj\Mapper\FolderMapperInterface;
 use Chomikuj\Mapper\FolderMapper;
+use Chomikuj\Mapper\FileMapperInterface;
+use Chomikuj\Mapper\FileMapper;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Cookie\CookieJar;
@@ -24,6 +26,7 @@ class Api implements ApiInterface
         'copy_file' => '/action/FileDetails/CopyFileAction',
         'rename_file' => '/action/FileDetails/EditNameAndDescAction',
         'get_folder_children' => '/action/tree/GetFolderChildrenHtml',
+        'search' => '/action/SearchFiles/Results',
     ];
     const ERR_REQUEST_FAILED = 'Request failed.';
     const ERR_WEIRD_RESPONSE = 'Response looks valid, but could not be read (reason unknown).';
@@ -33,10 +36,13 @@ class Api implements ApiInterface
 
     private $client;
     private $username = null;
+    private $folderMapper;
+    private $fileMapper;
 
     public function __construct(
         ?ClientInterface $client = null,
-        FolderMapperInterface $folderMapper = null
+        FolderMapperInterface $folderMapper = null,
+        FileMapperInterface $fileMapper = null
     ) {
         if ($client === null) {
             $client = new Client([
@@ -50,11 +56,14 @@ class Api implements ApiInterface
         }
 
         if ($folderMapper === null) {
-            $folderMapper = new FolderMapper;
+            $this->folderMapper = new FolderMapper;
+        }
+
+        if ($fileMapper === null) {
+            $this->fileMapper = new FileMapper;
         }
 
         $this->client = $client;
-        $this->folderMapper = $folderMapper;
     }
 
     public function login(string $username, string $password): ApiInterface
@@ -201,7 +210,7 @@ class Api implements ApiInterface
                 'form_params' => [
                     'chomikName' => $username ?? $this->getUsername(),
                     'folderId' => $folderId,
-                    'ticks' => '636888805182530000' // no idea what it is and if it expires or something (we'll see)
+                    'ticks' => '636891996218570000' // this changes, has to be fixed
                 ],
             ]
         );
@@ -278,6 +287,29 @@ class Api implements ApiInterface
         return $this;
     }
 
+    public function findFiles(string $phrase, array $optionalParameters = [], int $page = 1): array
+    {
+        $basicParameters = [
+            'FileName' => $phrase,
+            'IsGallery' => 0,
+            'Page' => $page
+        ];
+
+        $response = $this->client->request(
+            'POST',
+            $this->getUrl('search'),
+            [
+                'form_params' => $basicParameters + $optionalParameters
+            ]
+        );
+
+        if (!$this->wasRequestSuccessful($response, 'status_200')) {
+            throw new ChomikujException(self::ERR_REQUEST_FAILED);
+        }
+
+        return $this->fileMapper->mapSearchResponseToFiles($response);
+    }
+
     private function getUsername(): ?string
     {
         return $this->username;
@@ -313,6 +345,8 @@ class Api implements ApiInterface
                 return (isset($json->IsSuccess) && $json->IsSuccess === true);
             case 'status_200':
                 return ($response->getStatusCode() === 200);
+            case 'status_400':
+                return ($response->getStatusCode() === 400);
         }
     }
 

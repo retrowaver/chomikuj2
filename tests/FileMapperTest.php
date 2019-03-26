@@ -22,52 +22,54 @@ final class FileMapperTest extends TestCase
 	{
 		$responseBody = <<<EOD
 ...
-<div class="filerow alt fileItemContainer">
-    <div class="fileinfo tab">
-        <ul class="borderRadius tabGradientBg">
-            <li><span>52 MB</span></li>
-            <li><span class="date">3 maj 13 22:54</span></li>
-        </ul>
-    </div>
+<div id="listView">
+    <div class="filerow alt fileItemContainer">
+        <div class="fileinfo tab">
+            <ul class="borderRadius tabGradientBg">
+                <li><span>52 MB</span></li>
+                <li><span class="date">3 maj 13 22:54</span></li>
+            </ul>
+        </div>
 
-    <div class="fileActionsButtons clear visibleButtons  fileIdContainer" rel="2694749415" style="visibility: hidden;">
-        <ul>
-            <li><a class="showFileRating ratingBtn" href="javascript:;" title="Oceń plik"><span class="star5"></span></a></li>
-            <li><a href="/somepath/somefile.pdf" class="downloadAction downloadContext" title="pobierz" ><img alt="pobierz" src="//x4.static-chomikuj.pl/res/xxxxxxx.png" title="pobierz" /></a></li>
-        </ul>
+        <div class="fileActionsButtons clear visibleButtons  fileIdContainer" rel="2694749415" style="visibility: hidden;">
+            <ul>
+                <li><a class="showFileRating ratingBtn" href="javascript:;" title="Oceń plik"><span class="star5"></span></a></li>
+                <li><a href="/somepath/somefile.pdf" class="downloadAction downloadContext" title="pobierz" ><img alt="pobierz" src="//x4.static-chomikuj.pl/res/xxxxxxx.png" title="pobierz" /></a></li>
+            </ul>
+        </div>
+        <div onmouseover="$('.visibleArrow', this).css('visibility', 'visible')" 
+        onmouseout="$('.visibleArrow', this).css('visibility', 'hidden');" class="filename pdf">
+            <h3>
+                <a class="expanderHeader downloadAction downloadContext" href="/somepath/somefile.pdf" title="Some file name">
+                    <span class="bold">Some file name</span>.pdf
+                </a>
+                <img alt="pobierz" class="downloadArrow visibleArrow" src="//x4.static-chomikuj.pl/res/xxxxxxx.png" style="visibility: hidden;" title="pobierz" />
+            </h3>
+        </div>
     </div>
-    <div onmouseover="$('.visibleArrow', this).css('visibility', 'visible')" 
-    onmouseout="$('.visibleArrow', this).css('visibility', 'hidden');" class="filename pdf">
-        <h3>
-            <a class="expanderHeader downloadAction downloadContext" href="/somepath/somefile.pdf" title="Some file name">
-                <span class="bold">Some file name</span>.pdf
-            </a>
-            <img alt="pobierz" class="downloadArrow visibleArrow" src="//x4.static-chomikuj.pl/res/xxxxxxx.png" style="visibility: hidden;" title="pobierz" />
-        </h3>
-    </div>
-</div>
-<div class="filerow alt fileItemContainer">
-    <div class="fileinfo tab">
-        <ul class="borderRadius tabGradientBg">
-            <li><span>0,97 GB</span></li>
-            <li><span class="date">14 sie 17 5:58</span></li>
-        </ul>
-    </div>
+    <div class="filerow alt fileItemContainer">
+        <div class="fileinfo tab">
+            <ul class="borderRadius tabGradientBg">
+                <li><span>0,97 GB</span></li>
+                <li><span class="date">14 sie 17 5:58</span></li>
+            </ul>
+        </div>
 
-    <div class="fileActionsButtons clear visibleButtons  fileIdContainer" rel="2694749415" style="visibility: hidden;">
-        <ul>
-            <li><a class="showFileRating ratingBtn" href="javascript:;" title="Oceń plik"><span class="star5"></span></a></li>
-            <li><a href="/anotherpath/anotherfile.pdf" class="downloadAction downloadContext" title="pobierz" ><img alt="pobierz" src="//x4.static-chomikuj.pl/res/xxxxxxx.png" title="pobierz" /></a></li>
-        </ul>
-    </div>
-    <div onmouseover="$('.visibleArrow', this).css('visibility', 'visible')" 
-    onmouseout="$('.visibleArrow', this).css('visibility', 'hidden');" class="filename pdf">
-        <h3>
-            <a class="expanderHeader downloadAction downloadContext" href="/anotherpath/anotherfile.pdf" title="Another file name">
-                <span class="bold">Another file name</span>.pdf
-            </a>
-            <img alt="pobierz" class="downloadArrow visibleArrow" src="//x4.static-chomikuj.pl/res/xxxxxxx.png" style="visibility: hidden;" title="pobierz" />
-        </h3>
+        <div class="fileActionsButtons clear visibleButtons  fileIdContainer" rel="2694749415" style="visibility: hidden;">
+            <ul>
+                <li><a class="showFileRating ratingBtn" href="javascript:;" title="Oceń plik"><span class="star5"></span></a></li>
+                <li><a href="/anotherpath/anotherfile.pdf" class="downloadAction downloadContext" title="pobierz" ><img alt="pobierz" src="//x4.static-chomikuj.pl/res/xxxxxxx.png" title="pobierz" /></a></li>
+            </ul>
+        </div>
+        <div onmouseover="$('.visibleArrow', this).css('visibility', 'visible')" 
+        onmouseout="$('.visibleArrow', this).css('visibility', 'hidden');" class="filename pdf">
+            <h3>
+                <a class="expanderHeader downloadAction downloadContext" href="/anotherpath/anotherfile.pdf" title="Another file name">
+                    <span class="bold">Another file name</span>.pdf
+                </a>
+                <img alt="pobierz" class="downloadArrow visibleArrow" src="//x4.static-chomikuj.pl/res/xxxxxxx.png" style="visibility: hidden;" title="pobierz" />
+            </h3>
+        </div>
     </div>
 </div>
 ...

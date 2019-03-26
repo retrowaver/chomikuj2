@@ -12,12 +12,18 @@ class FileMapper implements FileMapperInterface
 	public function mapSearchResponseToFiles(ResponseInterface $response): array
 	{
         $html = $response->getBody()->getContents();
+        if (!$html) {
+            // This shouldn't happen
+            return [];
+        }
+
+        $html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
 
         $doc = new \DOMDocument();
         $doc->loadHTML($html);
         $xpath = new \DOMXpath($doc);
         
-        $rows = $xpath->query("//div[contains(@class, 'filerow')]");
+        $rows = $xpath->query("//div[@id='listView']/div[contains(@class, 'filerow')]");
         $files = [];
 
         foreach ($rows as $row) {
@@ -47,7 +53,7 @@ class FileMapper implements FileMapperInterface
         $fileInfoNodes = $xpath->query(".//*[contains(@class, 'fileinfo')]/ul/li/span", $contextNode);
 
         foreach ($fileInfoNodes as $node) {
-            preg_match('/^([0-9]+\ [A-Z]{2}|[0-9]{1},[0-9]+\ [A-Z]{2})$/', $node->nodeValue, $matches);
+            preg_match('/^([0-9]+\ [A-Z]{2}|[0-9]+,[0-9]+\ [A-Z]{2})$/', $node->nodeValue, $matches);
             
             if (!empty($matches)) {
                 return $matches[0];
@@ -102,7 +108,6 @@ class FileMapper implements FileMapperInterface
         );
 
         $unit = $textualSize[1];
-
 
         switch ($unit) {
             case 'KB':
