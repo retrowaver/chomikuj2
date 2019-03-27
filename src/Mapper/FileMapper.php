@@ -9,8 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class FileMapper implements FileMapperInterface
 {
-	public function mapSearchResponseToFiles(ResponseInterface $response): array
-	{
+    public function mapSearchResponseToFiles(ResponseInterface $response): array
+    {
         $html = $response->getBody()->getContents();
         if (!$html) {
             // This shouldn't happen

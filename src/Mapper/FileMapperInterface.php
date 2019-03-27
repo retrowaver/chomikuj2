@@ -7,11 +7,11 @@ use Psr\Http\Message\ResponseInterface;
 
 interface FileMapperInterface
 {
-	/**
-	 * Maps HTML response of folder tree to array of Files
-	 *
-	 * @param ResponseInterface $response
-	 * @return File[]
-	 */
-	public function mapSearchResponseToFiles(ResponseInterface $response): array;
+    /**
+     * Maps HTML response of folder tree to array of Files
+     *
+     * @param ResponseInterface $response
+     * @return File[]
+     */
+    public function mapSearchResponseToFiles(ResponseInterface $response): array;
 }

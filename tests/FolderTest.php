@@ -7,11 +7,11 @@ use Chomikuj\Entity\Folder;
 
 final class FolderTest extends TestCase
 {
-	public function testCanBeCreatedWithValidData(): void
-	{
-		$this->assertInstanceOf(
+    public function testCanBeCreatedWithValidData(): void
+    {
+        $this->assertInstanceOf(
             Folder::class,
             new Folder(123, 'foldername', '/path', [])
         );
-	}
+    }
 }

@@ -9,8 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class FolderMapper implements FolderMapperInterface
 {
-	public function mapHtmlResponseToFolders(ResponseInterface $response): array
-	{
+    public function mapHtmlResponseToFolders(ResponseInterface $response): array
+    {
         // Decode JSON
         $json = json_decode($response->getBody()->getContents());
         if ($json === null) {
@@ -56,5 +56,5 @@ class FolderMapper implements FolderMapperInterface
         }
 
         return $folders;
-	}
+    }
 }

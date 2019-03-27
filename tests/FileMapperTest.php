@@ -10,17 +10,17 @@ use GuzzleHttp\Psr7\Response;
 
 final class FileMapperTest extends TestCase
 {
-	public function testCanBeCreated(): void
-	{
-		$this->assertInstanceOf(
+    public function testCanBeCreated(): void
+    {
+        $this->assertInstanceOf(
             FileMapper::class,
             new FileMapper
         );
-	}
+    }
 
-	public function testMapSearchResponseReturnsObjectsWithValidData(): void
-	{
-		$responseBody = <<<EOD
+    public function testMapSearchResponseReturnsObjectsWithValidData(): void
+    {
+        $responseBody = <<<EOD
 ...
 <div id="listView">
     <div class="filerow alt fileItemContainer">
@@ -74,36 +74,36 @@ final class FileMapperTest extends TestCase
 </div>
 ...
 EOD;
-	
-		$response = new Response(200, [], $responseBody);
+    
+        $response = new Response(200, [], $responseBody);
 
-		$fileMapper = new fileMapper();
-		$files = $fileMapper->mapSearchResponseToFiles($response);
+        $fileMapper = new fileMapper();
+        $files = $fileMapper->mapSearchResponseToFiles($response);
 
-		// First file
-		$this->assertInstanceOf(
+        // First file
+        $this->assertInstanceOf(
             File::class,
             $files[0]
-		);
-		$this->assertEquals('/somepath/somefile.pdf', $files[0]->getPath());
-		$this->assertEquals('Some file name', $files[0]->getName());
-		$this->assertEquals(52 * 1024, $files[0]->getSize());
-		$this->assertEquals(
-			\DateTime::createFromFormat('Y-m-d H:i', '2013-05-03 22:54', new \DateTimeZone('Europe/Warsaw')),
-			$files[0]->getTimeUploaded()
-		);
+        );
+        $this->assertEquals('/somepath/somefile.pdf', $files[0]->getPath());
+        $this->assertEquals('Some file name', $files[0]->getName());
+        $this->assertEquals(52 * 1024, $files[0]->getSize());
+        $this->assertEquals(
+            \DateTime::createFromFormat('Y-m-d H:i', '2013-05-03 22:54', new \DateTimeZone('Europe/Warsaw')),
+            $files[0]->getTimeUploaded()
+        );
 
-		// Second file
-		$this->assertInstanceOf(
+        // Second file
+        $this->assertInstanceOf(
             File::class,
             $files[1]
-		);
-		$this->assertEquals('/anotherpath/anotherfile.pdf', $files[1]->getPath());
-		$this->assertEquals('Another file name', $files[1]->getName());
-		$this->assertEquals(floor(0.97 * 1024 * 1024), $files[1]->getSize());
-		$this->assertEquals(
-			\DateTime::createFromFormat('Y-m-d H:i', '2017-08-14 05:58', new \DateTimeZone('Europe/Warsaw')),
-			$files[1]->getTimeUploaded()
-		);
-	}
+        );
+        $this->assertEquals('/anotherpath/anotherfile.pdf', $files[1]->getPath());
+        $this->assertEquals('Another file name', $files[1]->getName());
+        $this->assertEquals(floor(0.97 * 1024 * 1024), $files[1]->getSize());
+        $this->assertEquals(
+            \DateTime::createFromFormat('Y-m-d H:i', '2017-08-14 05:58', new \DateTimeZone('Europe/Warsaw')),
+            $files[1]->getTimeUploaded()
+        );
+    }
 }
