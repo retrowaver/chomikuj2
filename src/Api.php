@@ -8,6 +8,8 @@ use Chomikuj\Mapper\FolderMapperInterface;
 use Chomikuj\Mapper\FolderMapper;
 use Chomikuj\Mapper\FileMapperInterface;
 use Chomikuj\Mapper\FileMapper;
+use Chomikuj\Service\FolderTicksService;
+use Chomikuj\Service\FolderTicksServiceInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Cookie\CookieJar;
@@ -38,11 +40,13 @@ class Api implements ApiInterface
     private $username = null;
     private $folderMapper;
     private $fileMapper;
+    private $folderTicksService;
 
-    public function __construct(
+    public function __construct (
         ?ClientInterface $client = null,
         FolderMapperInterface $folderMapper = null,
-        FileMapperInterface $fileMapper = null
+        FileMapperInterface $fileMapper = null,
+        FolderTicksServiceInterface $folderTicksService = null
     ) {
         if ($client === null) {
             $client = new Client([
@@ -56,13 +60,20 @@ class Api implements ApiInterface
         }
 
         if ($folderMapper === null) {
-            $this->folderMapper = new FolderMapper;
+            $folderMapper = new FolderMapper;
         }
 
         if ($fileMapper === null) {
-            $this->fileMapper = new FileMapper;
+            $fileMapper = new FileMapper;
         }
 
+        if ($folderTicksService === null) {
+            $folderTicksService = new FolderTicksService;
+        }
+
+        $this->folderMapper = $folderMapper;
+        $this->fileMapper = $fileMapper;
+        $this->folderTicksService = $folderTicksService;
         $this->client = $client;
     }
 
@@ -203,23 +214,42 @@ class Api implements ApiInterface
 
     public function getFolders(string $username, int $folderId = 0)
     {
-        $response = $this->client->request(
-            'POST',
-            $this->getUrl('get_folder_children'),
-            [
-                'form_params' => [
-                    'chomikName' => $username,
-                    'folderId' => $folderId,
-                    'ticks' => '636891996218570000' // this changes, has to be fixed
-                ],
-            ]
+        // Try for the first time
+        $response = $this->makeGetFoldersRequest(
+            $username,
+            $folderId,
+            $this->folderTicksService->getTicks($username)
         );
+
+        // Try once again, because ticks might have expired
+        if (!$this->wasRequestSuccessful($response, 'status_200')) {
+            $response = $this->makeGetFoldersRequest(
+                $username,
+                $folderId,
+                $this->folderTicksService->getTicks($username, true)
+            );
+        }
 
         if (!$this->wasRequestSuccessful($response, 'status_200')) {
             throw new ChomikujException(self::ERR_REQUEST_FAILED);
         }
 
         return $this->folderMapper->mapHtmlResponseToFolders($response);
+    }
+
+    private function makeGetFoldersRequest(string $username, int $folderId, string $ticks): ResponseInterface
+    {
+        return $this->client->request(
+            'POST',
+            $this->getUrl('get_folder_children'),
+            [
+                'form_params' => [
+                    'chomikName' => $username,
+                    'folderId' => $folderId,
+                    'ticks' => $ticks
+                ],
+            ]
+        );
     }
 
     public function moveFile(int $fileId, int $sourceFolderId, int $destinationFolderId): ApiInterface

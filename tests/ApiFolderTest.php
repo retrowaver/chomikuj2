@@ -110,6 +110,7 @@ final class ApiFolderTest extends TestCase
         $api = FakeApiFactory::getApi(
             'username',
             [
+                new Response(200, [], '<input type="hidden" name="TreeTicks" value="636891996218570000">'),
                 new Response(200, [], '{"Status":0,"Html":"<tr><td class=\"T_bg\"><div class=\"T T_pn\"><\/div><\/td><td><a href=\"\/username\/folder1\" rel=\"1\" title=\"Folder 1\" id=\"Ta_1\">Folder 1<\/a><\/td><\/tr><tr><td class=\"T_bg\"><div class=\"T_pn\"><div id=\"Ti_2\" class=\"T_exp\"><\/div><\/div><\/td><td><a href=\"\/username\/folder2\" rel=\"2\" title=\"Folder 2\" id=\"Ta_2\">Folder 2<\/a><\/td><\/tr>"}'),
             ]
         );

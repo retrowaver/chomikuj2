@@ -2,6 +2,7 @@
 
 use Chomikuj\Api;
 use Chomikuj\Exception\ChomikujException;
+use Chomikuj\Service\FolderTicksService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -36,7 +37,12 @@ class FakeApiFactory
         }
 
         // Set up Api
-        $api = new Api($client);
+        $api = new Api(
+            $client,
+            null,
+            null,
+            new FolderTicksService($client)
+        );
 
         // Artificially set username of logged-in user
         if ($loggedAs !== null) {
